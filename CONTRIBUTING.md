@@ -275,13 +275,6 @@ Brève description de la modification.
 - [ ] Si j'ai modifié l'API, le contrat API (docs/API.md) est à jour
 ```
 
-### Processus de review
-
-1. L'auteur ouvre la PR et assigne un reviewer
-2. Le reviewer commente ou approuve
-3. L'auteur corrige les retours si nécessaire
-4. Le reviewer approuve → la PR est mergée dans `dev`
-
 ---
 
 ## 9. Contrat API
@@ -355,8 +348,8 @@ build/
 
 ---
 
-> **Merci de respecter ces conventions.** Elles permettent à l'équipe de travailler efficacement et de livrer un produit de qualité dans les délais impartis. 🚀
+> **Merci de respecter ces conventions.** Elles permettent à l'équipe de travailler efficacement et de livrer un produit de qualité dans les délais impartis. 
 
 ---
 
-_Digital Library BF — Guide de Contribution — Mars 2026_
+Digital Library BF — Guide de Contribution — Mars 2026
