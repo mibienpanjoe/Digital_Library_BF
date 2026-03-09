@@ -64,8 +64,8 @@ Assurez-vous d'avoir les outils suivants installés :
 ### Cloner le dépôt
 
 ```bash
-git clone https://github.com/<organisation>/digital-library-bf.git
-cd digital-library-bf
+git clone https://github.com/mibienpanjoe/Digital_Library_BF.git
+cd Digital_Library_BF
 ```
 
 ### Backend
