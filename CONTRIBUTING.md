@@ -35,7 +35,8 @@ digital-library-bf/
 │   ├── project_overview.md
 │   ├── SRS.md
 │   ├── system_contract_and_invariants.md
-│   └── API.md
+│   ├── API.md
+│   └── visual_identity.md
 ├── CONTRIBUTING.md   # Ce fichier
 └── README.md
 ```
