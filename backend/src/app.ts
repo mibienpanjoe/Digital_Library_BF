@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import rateLimit from "express-rate-limit";
+import { errorMiddleware } from "./middlewares/error.middleware";
 
 const app = express();
 
@@ -32,7 +33,7 @@ const limiter = rateLimit({
 app.use(limiter);
 
 // --- Routes ---
-// Les routes seront montées ici dans les phases suivantes
+// Les routes seront montées ici en Phase 3
 // import routes from "./routes";
 // app.use("/api/v1", routes);
 
@@ -41,9 +42,7 @@ app.get("/health", (_req, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
 
-// --- Error middleware ---
-// Sera ajouté en Phase 2
-// import { errorMiddleware } from "./middlewares/error.middleware";
-// app.use(errorMiddleware);
+// --- Error middleware (DOIT être en dernier) ---
+app.use(errorMiddleware);
 
 export default app;
