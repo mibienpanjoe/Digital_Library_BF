@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import rateLimit from "express-rate-limit";
+import routes from "./routes";
 import { errorMiddleware } from "./middlewares/error.middleware";
 
 const app = express();
@@ -33,9 +34,7 @@ const limiter = rateLimit({
 app.use(limiter);
 
 // --- Routes ---
-// Les routes seront montées ici en Phase 3
-// import routes from "./routes";
-// app.use("/api/v1", routes);
+app.use("/api/v1", routes);
 
 // Health check
 app.get("/health", (_req, res) => {
