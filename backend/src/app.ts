@@ -1,8 +1,10 @@
 import express from "express";
 import cors from "cors";
 import rateLimit from "express-rate-limit";
+import swaggerUi from "swagger-ui-express";
 import routes from "./routes";
 import { errorMiddleware } from "./middlewares/error.middleware";
+import { swaggerSpec } from "./config/swagger";
 
 const app = express();
 
@@ -32,6 +34,17 @@ const limiter = rateLimit({
   },
 });
 app.use(limiter);
+
+// --- Documentation Swagger ---
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
+  customSiteTitle: "Digital Library BF — API Docs",
+  customCss: ".swagger-ui .topbar { display: none }",
+}));
+
+// Endpoint JSON de la spec OpenAPI
+app.get("/api-docs.json", (_req, res) => {
+  res.json(swaggerSpec);
+});
 
 // --- Routes ---
 app.use("/api/v1", routes);
