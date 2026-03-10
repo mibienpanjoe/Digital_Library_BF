@@ -11,10 +11,11 @@ const router = Router();
 // Tous les endpoints admin requièrent auth + admin
 router.use(authMiddleware, adminMiddleware);
 
+// ─── Livres ───────────────────────────────────────────────
+
 /**
  * POST /admin/books — 🔑 Admin
  * Ajouter un livre au catalogue.
- * Middlewares : auth → admin → upload → validate
  */
 router.post(
   "/books",
@@ -26,20 +27,35 @@ router.post(
 /**
  * PUT /admin/books/:id — 🔑 Admin
  * Mettre à jour un livre.
- * Middlewares : auth → admin → upload
  */
 router.put("/books/:id", uploadMiddleware, adminController.updateBook);
 
 /**
  * DELETE /admin/books/:id — 🔑 Admin
  * Supprimer un livre.
- * Middlewares : auth → admin
  */
 router.delete("/books/:id", adminController.deleteBook);
 
-// Les routes admin users et dashboard seront ajoutées en Phase 5
-// router.get("/users", adminController.getUsers);
-// router.get("/users/:id/downloads", adminController.getUserDownloads);
-// router.get("/dashboard/stats", adminController.getStats);
+// ─── Utilisateurs ─────────────────────────────────────────
+
+/**
+ * GET /admin/users — 🔑 Admin
+ * Liste paginée des utilisateurs.
+ */
+router.get("/users", adminController.getUsers);
+
+/**
+ * GET /admin/users/:id/downloads — 🔑 Admin
+ * Historique des téléchargements d'un utilisateur.
+ */
+router.get("/users/:id/downloads", adminController.getUserDownloads);
+
+// ─── Dashboard ────────────────────────────────────────────
+
+/**
+ * GET /admin/dashboard/stats — 🔑 Admin
+ * Statistiques agrégées de la plateforme.
+ */
+router.get("/dashboard/stats", adminController.getStats);
 
 export default router;
