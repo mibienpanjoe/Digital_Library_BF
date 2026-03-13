@@ -69,9 +69,9 @@ class BookDetailScreen extends ConsumerWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _buildInfoBadge('Format', book.fileFormat.toUpperCase()),
-                  _buildInfoBadge('Taille', FileHelper.formatBytes(book.fileSize)),
-                  _buildInfoBadge('Catégorie', book.category ?? '—'),
+                  _buildInfoBadge(context, 'Format', book.fileFormat.toUpperCase()),
+                  _buildInfoBadge(context, 'Taille', FileHelper.formatBytes(book.fileSize)),
+                  _buildInfoBadge(context, 'Catégorie', book.category ?? '—'),
                 ],
               ),
               const SizedBox(height: 32),
@@ -103,18 +103,35 @@ class BookDetailScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildInfoBadge(String label, String value) {
+  Widget _buildInfoBadge(BuildContext context, String label, String value) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    
     return Column(
       children: [
-        Text(label, style: const TextStyle(color: AppColors.lightTextSec, fontSize: 12)),
-        const SizedBox(height: 4),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          decoration: BoxDecoration(
-            color: AppColors.lightSurfaceHov,
-            borderRadius: BorderRadius.circular(16),
+        Text(
+          label,
+          style: TextStyle(
+            color: isDark ? AppColors.darkTextSec : AppColors.lightTextSec,
+            fontSize: 12,
           ),
-          child: Text(value, style: const TextStyle(fontWeight: FontWeight.bold)),
+        ),
+        const SizedBox(height: 6),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          decoration: BoxDecoration(
+            color: isDark ? AppColors.darkSurfaceHov : AppColors.lightSurfaceHov,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: isDark ? AppColors.darkBorder : AppColors.lightBorder,
+            ),
+          ),
+          child: Text(
+            value,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: isDark ? AppColors.darkTextPri : AppColors.lightTextPri,
+            ),
+          ),
         ),
       ],
     );

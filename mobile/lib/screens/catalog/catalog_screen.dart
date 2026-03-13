@@ -6,6 +6,10 @@ import '../../widgets/search_bar.dart';
 import '../../widgets/pagination_controls.dart';
 import '../../widgets/error_state.dart';
 import '../../widgets/skeleton_loader.dart';
+import '../../widgets/empty_state.dart';
+import '../../utils/exceptions.dart';
+import '../../models/api_response.dart';
+import '../../models/book.dart';
 
 class CatalogScreen extends ConsumerStatefulWidget {
   const CatalogScreen({super.key});
@@ -65,25 +69,37 @@ class _CatalogScreenState extends ConsumerState<CatalogScreen> {
           ),
           Expanded(
             child: booksAsync.when(
-              data: (books) {
+              data: (paginated) {
+                final books = paginated.data;
                 if (books.isEmpty) {
-                  return const Center(child: Text('Aucun livre trouvé'));
+                  return EmptyState(
+                    title: 'Aucun livre trouvé',
+                    message: _searchQuery != null && _searchQuery!.isNotEmpty
+                        ? 'Aucun résultat pour "$_searchQuery"'
+                        : 'Le catalogue est actuellement vide.',
+                    onAction: _searchQuery != null && _searchQuery!.isNotEmpty
+                        ? () {
+                            _searchController.clear();
+                            _onSearch('');
+                          }
+                        : null,
+                    actionLabel: 'Effacer la recherche',
+                  );
                 }
                 return BookGrid(books: books);
               },
               loading: () => const BookGrid(books: [], isLoading: true),
               error: (err, stack) => ErrorState(
-                message: err.toString(),
+                message: err is AppException ? err.message : err.toString(),
                 onRetry: () => ref.refresh(booksProvider(filters)),
               ),
             ),
           ),
-          // Simple pagination - in a real app, we'd get totalPages from the API
-          // For now, we assume 5 pages if there are books
-          if (booksAsync.hasValue && booksAsync.value!.isNotEmpty)
+          // Pagination dynamique utilisant les données de l'API
+          if (booksAsync.hasValue && booksAsync.value!.data.isNotEmpty)
             PaginationControls(
               currentPage: _currentPage,
-              totalPages: 5, 
+              totalPages: booksAsync.value!.pagination.totalPages,
               onPageChanged: _onPageChanged,
             ),
         ],

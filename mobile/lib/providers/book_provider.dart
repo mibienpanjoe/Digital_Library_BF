@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/book.dart';
+import '../models/api_response.dart';
 import 'repository_providers.dart';
 
 // Filter model to keep parameters together
@@ -31,15 +32,14 @@ class BookFilters {
 }
 
 // Provider for the list of books
-final booksProvider = FutureProvider.family<List<Book>, BookFilters>((ref, filters) async {
+final booksProvider = FutureProvider.family<PaginatedResponse<Book>, BookFilters>((ref, filters) async {
   final repository = ref.watch(bookRepositoryProvider);
-  final response = await repository.getBooks(
+  return await repository.getBooks(
     page: filters.page,
     limit: filters.limit,
     search: filters.search,
     category: filters.category,
   );
-  return response.data;
 });
 
 // Provider for a single book's details
