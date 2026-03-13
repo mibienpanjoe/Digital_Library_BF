@@ -29,7 +29,7 @@ class _DownloadButtonState extends ConsumerState<DownloadButton> {
         widget.book,
         (count, total) {
           final progress = count / total;
-          progressNotifier.update((state) => {...state, widget.book.id: progress});
+          progressNotifier.updateProgress(widget.book.id, progress);
         },
       );
 
@@ -38,12 +38,12 @@ class _DownloadButtonState extends ConsumerState<DownloadButton> {
       );
       
       // Update progress to 1.1 to signify "Downloaded and ready to open"
-      progressNotifier.update((state) => {...state, widget.book.id: 1.1});
+      progressNotifier.updateProgress(widget.book.id, 1.1);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Erreur de téléchargement: $e')),
       );
-      progressNotifier.update((state) => {...state, widget.book.id: 0.0});
+      progressNotifier.updateProgress(widget.book.id, 0.0);
     }
   }
 

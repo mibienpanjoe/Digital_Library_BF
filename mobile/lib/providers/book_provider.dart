@@ -49,4 +49,21 @@ final bookDetailProvider = FutureProvider.family<Book, String>((ref, id) async {
 });
 
 // Provider for tracking download progress (bookId -> percentage 0.0 to 1.0)
-final downloadProgressProvider = StateProvider<Map<String, double>>((ref) => {});
+class DownloadProgressNotifier extends Notifier<Map<String, double>> {
+  @override
+  Map<String, double> build() => {};
+
+  void updateProgress(String bookId, double progress) {
+    state = {...state, bookId: progress};
+  }
+
+  void removeProgress(String bookId) {
+    final newState = {...state};
+    newState.remove(bookId);
+    state = newState;
+  }
+}
+
+final downloadProgressProvider = NotifierProvider<DownloadProgressNotifier, Map<String, double>>(
+  DownloadProgressNotifier.new,
+);

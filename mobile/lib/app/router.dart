@@ -1,15 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import '../screens/splash/splash_screen.dart';
-import '../screens/auth/login_screen.dart';
-import '../screens/auth/register_screen.dart';
-import '../screens/catalog/catalog_screen.dart';
-import '../screens/book/book_detail_screen.dart';
-import '../screens/profile/profile_screen.dart';
-import '../screens/downloads/downloads_screen.dart';
-import '../widgets/main_shell.dart';
-
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/auth_provider.dart';
