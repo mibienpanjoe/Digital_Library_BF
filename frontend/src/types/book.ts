@@ -1,13 +1,36 @@
 export interface Book {
-  id: string
-  title: string
-  author: string
-  description: string
-  category: string
-  file_url: string
-  cover_url: string
-  file_format: string
-  file_size: number
-  download_count: number
-  created_at: string
+  id: string;
+  title: string;
+  author: string;
+  description: string;
+  category: string;
+  coverUrl: string;
+  fileFormat: string;
+  fileSize: number;
+  downloadCount: number;
+  createdAt: string;
+  updatedAt?: string;
+}
+
+export interface BookFilters {
+  page?: number;
+  limit?: number;
+  search?: string;
+  category?: string;
+  sortBy?: "title" | "author" | "createdAt";
+  order?: "asc" | "desc";
+}
+
+export interface BookCreate {
+  title: string;
+  author: string;
+  description: string;
+  category?: string;
+}
+
+export interface BookUpdate {
+  title?: string;
+  author?: string;
+  description?: string;
+  category?: string;
 }

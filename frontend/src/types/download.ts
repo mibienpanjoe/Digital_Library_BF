@@ -1,10 +1,27 @@
 export interface Download {
-    id: string
-    user_id: string
-    book_id: string
-    downloaded_at: string
-    book?: {
-        title: string
-        author: string
-    }
+  id: string;
+  book: {
+    id: string;
+    title: string;
+    author: string;
+  };
+  downloadedAt: string;
+}
+
+export interface DashboardStats {
+  totalBooks: number;
+  totalUsers: number;
+  totalDownloads: number;
+  recentDownloads: {
+    id: string;
+    user: {
+      id: string;
+      name: string;
+    };
+    book: {
+      id: string;
+      title: string;
+    };
+    downloadedAt: string;
+  }[];
 }
