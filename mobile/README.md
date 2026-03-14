@@ -1,16 +1,69 @@
-# mobile
+# Digital Library BF — Application Mobile
 
-A new Flutter project.
+Application mobile Flutter de la Bibliothèque Numérique du Burkina Faso.
 
-## Getting Started
+## Stack Technique
 
-This project is a starting point for a Flutter application.
+- **Framework** : Flutter
+- **État (State Management)** : Riverpod
+- **Navigation** : GoRouter
+- **Client HTTP** : Dio
+- **Stockage local** : Flutter Secure Storage
+- **Polices** : Google Fonts (Inter / Roboto)
+- **UI** : Material Design 3
 
-A few resources to get you started if this is your first Flutter project:
+## Démarrage rapide
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+```bash
+# 1. Installer les dépendances
+flutter pub get
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# 2. Configurer les assets (si nécessaire)
+# Les images doivent être dans assets/images/
+
+# 3. Lancer l'application
+flutter run
+```
+
+L'application communique avec l'API backend située dans `/backend`.
+
+## Écrans de l'application
+
+| Écran          | Description                                    | État d'implémentation |
+| -------------- | ---------------------------------------------- | ---------------------- |
+| Splash         | Écran de chargement initial                    | ✅                     |
+| Authentification| Connexion et Inscription                       | ✅                     |
+| Catalogue      | Liste des livres avec recherche et filtres     | ✅                     |
+| Détails Livre  | Informations complètes et bouton téléchargement| ✅                     |
+| Téléchargements| Historique des livres téléchargés localement   | ✅                     |
+| Profil         | Gestion des informations utilisateur           | ✅                     |
+
+## Scripts utiles
+
+```bash
+flutter pub get          # Télécharger les dépendances
+flutter clean            # Nettoyer le build
+flutter test             # Lancer les tests unitaires
+flutter build apk        # Générer l'APK pour Android
+```
+
+## Architecture
+
+L'application suit une architecture en couches pour favoriser la maintenabilité :
+
+```
+lib/
+├── app/             # Configuration globale (thème, routeur)
+├── config/          # Constantes et variables d'environnement
+├── models/          # Modèles de données (Data classes)
+├── providers/       # État applicatif (Riverpod providers)
+├── repositories/    # Abstraction de la source de données (API)
+├── screens/         # Interfaces utilisateur (écrans)
+├── services/        # Services techniques (API, Storage, File)
+├── utils/           # Helpers et utilitaires
+└── widgets/         # Composants UI réutilisables
+```
+
+---
+
+Digital Library BF — Application Mobile — Mars 2026
