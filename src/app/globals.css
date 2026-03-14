@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Mode Clair */
+    --background: 0 0% 100%; /* #FFFFFF */
+    --foreground: 222 47% 11%; /* #0F172A (Slate 900) */
+    --card: 210 40% 98%; /* #F8FAFC (Slate 50) */
+    --card-foreground: 222 47% 11%;
+    --primary: 217 91% 60%; /* #2563EB (Blue 600) */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 40% 96%; /* #F1F5F9 (Slate 100) */
+    --secondary-foreground: 222 47% 11%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%; /* #64748B (Slate 500) */
+    --accent: 37 91% 55%; /* #D97706 (Amber 600 — Sahel Gold) */
+    --accent-foreground: 0 0% 100%;
+    --border: 214 32% 91%; /* #E2E8F0 (Slate 200) */
+    --input: 214 32% 91%;
+    --ring: 217 91% 60%; /* #2563EB */
+    --radius: 0.5rem; /* 8px (boutons) — cards utilisent 0.75rem */
+    
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+  }
+
+  .dark {
+    /* Mode Sombre */
+    --background: 222 47% 11%; /* #0F172A (Slate 900) */
+    --foreground: 210 40% 98%; /* #F8FAFC (Slate 50) */
+    --card: 217 33% 17%; /* #1E293B (Slate 800) */
+    --card-foreground: 210 40% 98%;
+    --primary: 217 91% 60%; /* #2563EB */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 217 19% 27%; /* #334155 (Slate 700) */
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217 19% 27%;
+    --muted-foreground: 215 20% 65%; /* #94A3B8 (Slate 400) */
+    --accent: 37 91% 55%; /* #D97706 */
+    --accent-foreground: 0 0% 100%;
+    --border: 217 19% 27%; /* #334155 (Slate 700) */
+    --input: 217 19% 27%;
+    --ring: 217 91% 60%;
+    
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --popover: 222 47% 11%;
+    --popover-foreground: 210 40% 98%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}

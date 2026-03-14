@@ -1,0 +1,2 @@
+﻿src/app/login/page.tsx(9,23): error TS2307: Cannot find module '@/components/ui/label' or its corresponding type declarations.
+src/app/register/page.tsx(9,23): error TS2307: Cannot find module '@/components/ui/label' or its corresponding type declarations.
