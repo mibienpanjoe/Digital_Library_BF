@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { StatsCard } from "@/components/admin/StatsCard";
 import { DownloadHistory } from "@/components/admin/DownloadHistory";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -17,7 +17,7 @@ export default function AdminDashboardPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchStats = async () => {
+  const fetchStats = useCallback(async () => {
     setIsLoading(true);
     try {
       const data = await adminService.getDashboardStats();
@@ -29,11 +29,11 @@ export default function AdminDashboardPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchStats();
-  }, []);
+  }, [fetchStats]);
 
   if (error) {
     return <ErrorState message={error} onRetry={fetchStats} />;

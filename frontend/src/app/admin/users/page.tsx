@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { UserTable } from "@/components/admin/UserTable";
 import { DownloadHistory } from "@/components/admin/DownloadHistory";
 import { Pagination } from "@/components/shared/Pagination";
@@ -39,7 +39,7 @@ export default function AdminUsersPage() {
   const [downloadsLoading, setDownloadsLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     setIsLoading(true);
     try {
       const response = await adminService.getUsers({ page, limit: 20, search });
@@ -52,11 +52,11 @@ export default function AdminUsersPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [page, search]);
 
   useEffect(() => {
     fetchUsers();
-  }, [page, search]);
+  }, [fetchUsers]);
 
   const handleViewDownloads = async (user: User) => {
     setSelectedUser(user);

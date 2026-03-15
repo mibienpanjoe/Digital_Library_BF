@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { BookTable } from "@/components/admin/BookTable";
 import { DeleteBookDialog } from "@/components/admin/DeleteBookDialog";
 import { Pagination } from "@/components/shared/Pagination";
@@ -25,7 +25,7 @@ export default function AdminBooksPage() {
   const [deleteBook, setDeleteBook] = useState<Book | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
-  const fetchBooks = async () => {
+  const fetchBooks = useCallback(async () => {
     setIsLoading(true);
     try {
       const response = await bookService.getAll({ page, limit: 20, search });
@@ -38,11 +38,11 @@ export default function AdminBooksPage() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [page, search]);
 
   useEffect(() => {
     fetchBooks();
-  }, [page, search]);
+  }, [fetchBooks]);
 
   const handleDelete = (book: Book) => {
     setDeleteBook(book);
