@@ -11,9 +11,10 @@ import { toast } from "sonner";
 interface DownloadButtonProps {
   bookId: string;
   bookTitle: string;
+  fileFormat: string;
 }
 
-export function DownloadButton({ bookId, bookTitle }: DownloadButtonProps) {
+export function DownloadButton({ bookId, bookTitle, fileFormat }: DownloadButtonProps) {
   const { isAuthenticated } = useAuthContext();
   const router = useRouter();
   const [isDownloading, setIsDownloading] = useState(false);
@@ -30,7 +31,7 @@ export function DownloadButton({ bookId, bookTitle }: DownloadButtonProps) {
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `${bookTitle}.pdf`;
+      a.download = `${bookTitle}.${fileFormat}`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);

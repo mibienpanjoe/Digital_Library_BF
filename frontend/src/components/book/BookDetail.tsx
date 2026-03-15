@@ -74,7 +74,7 @@ export function BookDetail({ book }: BookDetailProps) {
         </div>
 
         <div className="mt-8">
-          <DownloadButton bookId={book.id} bookTitle={book.title} />
+          <DownloadButton bookId={book.id} bookTitle={book.title} fileFormat={book.fileFormat} />
         </div>
       </div>
     </div>
