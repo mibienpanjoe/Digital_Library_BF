@@ -8,7 +8,7 @@ import {
   useCallback,
   type ReactNode,
 } from "react";
-import type { User } from "@/types/user";
+import type { User, AuthResponse } from "@/types/user";
 import type { LoginInput, RegisterInput } from "@/types/user";
 import { authService } from "@/services/auth.service";
 
@@ -16,7 +16,7 @@ interface AuthContextType {
   user: User | null;
   token: string | null;
   isLoading: boolean;
-  login: (data: LoginInput) => Promise<void>;
+  login: (data: LoginInput) => Promise<AuthResponse>;
   register: (data: RegisterInput) => Promise<void>;
   logout: () => void;
   isAuthenticated: boolean;
@@ -45,13 +45,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(false);
   }, []);
 
-  const login = useCallback(async (data: LoginInput) => {
+  const login = useCallback(async (data: LoginInput): Promise<AuthResponse> => {
     const response = await authService.login(data);
     setUser(response.user);
     setToken(response.token);
     localStorage.setItem("token", response.token);
     localStorage.setItem("user", JSON.stringify(response.user));
     document.cookie = `token=${response.token}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax`;
+    return response;
   }, []);
 
   const register = useCallback(async (data: RegisterInput) => {

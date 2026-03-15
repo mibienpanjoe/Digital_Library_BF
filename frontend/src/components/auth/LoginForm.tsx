@@ -36,9 +36,13 @@ export function LoginForm() {
   const onSubmit = async (data: LoginFormValues) => {
     setIsLoading(true);
     try {
-      await login(data);
+      const response = await login(data);
       toast.success("Connexion réussie !");
-      router.push("/");
+      if (response.user.role === "admin") {
+        router.push("/admin/dashboard");
+      } else {
+        router.push("/");
+      }
     } catch (error) {
       toast.error(
         error instanceof Error ? error.message : "Erreur de connexion"
