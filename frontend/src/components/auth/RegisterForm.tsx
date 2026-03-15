@@ -42,9 +42,13 @@ export function RegisterForm() {
   const onSubmit = async (data: RegisterFormValues) => {
     setIsLoading(true);
     try {
-      await registerUser(data);
+      const response = await registerUser(data);
       toast.success("Inscription réussie !");
-      router.push("/");
+      if (response.user.role === "admin") {
+        router.push("/admin/dashboard");
+      } else {
+        router.push("/");
+      }
     } catch (error) {
       toast.error(
         error instanceof Error ? error.message : "Erreur d'inscription"

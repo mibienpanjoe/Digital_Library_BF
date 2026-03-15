@@ -17,7 +17,7 @@ interface AuthContextType {
   token: string | null;
   isLoading: boolean;
   login: (data: LoginInput) => Promise<AuthResponse>;
-  register: (data: RegisterInput) => Promise<void>;
+  register: (data: RegisterInput) => Promise<AuthResponse>;
   logout: () => void;
   isAuthenticated: boolean;
   isAdmin: boolean;
@@ -55,13 +55,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return response;
   }, []);
 
-  const register = useCallback(async (data: RegisterInput) => {
+  const register = useCallback(async (data: RegisterInput): Promise<AuthResponse> => {
     const response = await authService.register(data);
     setUser(response.user);
     setToken(response.token);
     localStorage.setItem("token", response.token);
     localStorage.setItem("user", JSON.stringify(response.user));
     document.cookie = `token=${response.token}; path=/; max-age=${60 * 60 * 24 * 7}; SameSite=Lax`;
+    return response;
   }, []);
 
   const logout = useCallback(() => {
