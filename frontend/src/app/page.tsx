@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { BookGrid } from "@/components/book/BookGrid";
@@ -11,6 +13,7 @@ import { useBooks } from "@/hooks/useBooks";
 import { BookOpen } from "lucide-react";
 
 export default function HomePage() {
+  const [currentCategory, setCurrentCategory] = useState("");
   const {
     books,
     isLoading,
@@ -53,9 +56,11 @@ export default function HomePage() {
               onSearch={(search) =>
                 setFilters((prev) => ({ ...prev, search, page: 1 }))
               }
-              onCategoryChange={(category) =>
-                setFilters((prev) => ({ ...prev, category, page: 1 }))
-              }
+              onCategoryChange={(category) => {
+                setCurrentCategory(category);
+                setFilters((prev) => ({ ...prev, category, page: 1 }));
+              }}
+              currentCategory={currentCategory}
             />
           </div>
 
