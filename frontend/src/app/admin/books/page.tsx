@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { BookTable } from "@/components/admin/BookTable";
 import { DeleteBookDialog } from "@/components/admin/DeleteBookDialog";
 import { Pagination } from "@/components/shared/Pagination";
@@ -22,13 +22,24 @@ export default function AdminBooksPage() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const debounceRef = useRef<NodeJS.Timeout | null>(null);
   const [deleteBook, setDeleteBook] = useState<Book | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+
+  const handleSearchChange = (value: string) => {
+    setSearch(value);
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      setDebouncedSearch(value);
+      setPage(1);
+    }, 400);
+  };
 
   const fetchBooks = useCallback(async () => {
     setIsLoading(true);
     try {
-      const response = await bookService.getAll({ page, limit: 20, search });
+      const response = await bookService.getAll({ page, limit: 20, search: debouncedSearch });
       setBooks(response.data);
       setTotalPages(response.pagination.totalPages);
     } catch (err) {
@@ -38,7 +49,7 @@ export default function AdminBooksPage() {
     } finally {
       setIsLoading(false);
     }
-  }, [page, search]);
+  }, [page, debouncedSearch]);
 
   useEffect(() => {
     fetchBooks();
@@ -80,10 +91,7 @@ export default function AdminBooksPage() {
               <Input
                 placeholder="Rechercher..."
                 value={search}
-                onChange={(e) => {
-                  setSearch(e.target.value);
-                  setPage(1);
-                }}
+                onChange={(e) => handleSearchChange(e.target.value)}
                 className="pl-10"
               />
             </div>

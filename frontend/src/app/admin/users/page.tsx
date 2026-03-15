@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { UserTable } from "@/components/admin/UserTable";
 import { DownloadHistory } from "@/components/admin/DownloadHistory";
 import { Pagination } from "@/components/shared/Pagination";
@@ -32,6 +32,8 @@ export default function AdminUsersPage() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+  const debounceRef = useRef<NodeJS.Timeout | null>(null);
 
   // Download history dialog
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
@@ -39,10 +41,19 @@ export default function AdminUsersPage() {
   const [downloadsLoading, setDownloadsLoading] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
 
+  const handleSearchChange = (value: string) => {
+    setSearch(value);
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      setDebouncedSearch(value);
+      setPage(1);
+    }, 400);
+  };
+
   const fetchUsers = useCallback(async () => {
     setIsLoading(true);
     try {
-      const response = await adminService.getUsers({ page, limit: 20, search });
+      const response = await adminService.getUsers({ page, limit: 20, search: debouncedSearch });
       setUsers(response.data);
       setTotalPages(response.pagination.totalPages);
     } catch (err) {
@@ -52,7 +63,7 @@ export default function AdminUsersPage() {
     } finally {
       setIsLoading(false);
     }
-  }, [page, search]);
+  }, [page, debouncedSearch]);
 
   useEffect(() => {
     fetchUsers();
@@ -93,10 +104,7 @@ export default function AdminUsersPage() {
               <Input
                 placeholder="Rechercher..."
                 value={search}
-                onChange={(e) => {
-                  setSearch(e.target.value);
-                  setPage(1);
-                }}
+                onChange={(e) => handleSearchChange(e.target.value)}
                 className="pl-10"
               />
             </div>
