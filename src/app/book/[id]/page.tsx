@@ -10,6 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Book } from "@/types/book";
 import { formatFileSize, formatDate } from "@/lib/format";
 import { Calendar, User, FileText, Download } from "lucide-react";
+import { bookService } from "@/services/book.service";
 
 export default function BookDetailPage() {
   const { id } = useParams();
@@ -17,26 +18,14 @@ export default function BookDetailPage() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simulated API call
     const fetchBook = async () => {
       try {
         setIsLoading(true);
-        await new Promise(resolve => setTimeout(resolve, 800));
-        
-        // Mock data
-        setBook({
-          id: id as string,
-          title: "Histoire du Burkina Faso",
-          author: "Jean-Baptiste Kiéthéga",
-          description: "Cet ouvrage retrace l'histoire du Burkina Faso des origines à nos jours. Il explore les différentes dynasties, la colonisation et l'indépendance du pays. Une référence incontournable pour les étudiants et chercheurs.",
-          fileFormat: "pdf",
-          fileSize: 2500000,
-          category: "Histoire",
-          downloadCount: 154,
-          createdAt: new Date("2023-11-15").toISOString(),
-          updatedAt: new Date().toISOString(),
-          coverUrl: "https://images.unsplash.com/photo-1589829085413-56de8ae18c73?auto=format&fit=crop&q=80&w=600"
-        });
+        if (id && typeof id === "string") {
+          const response = await bookService.getById(id);
+          // Assuming ApiResponse format with data: Book
+          setBook(response.data || (response as any));
+        }
       } catch (error) {
         console.error("Failed to fetch book", error);
       } finally {
@@ -102,7 +91,7 @@ export default function BookDetailPage() {
           {/* Details */}
           <div className="md:col-span-2 flex flex-col">
             <div className="mb-6">
-              <Badge className="mb-2 uppercase tracking-wide">{book.category}</Badge>
+              {book.category && <Badge className="mb-2 uppercase tracking-wide">{book.category}</Badge>}
               <h1 className="text-3xl md:text-4xl font-bold text-slate-900 dark:text-slate-50 mb-2">
                 {book.title}
               </h1>

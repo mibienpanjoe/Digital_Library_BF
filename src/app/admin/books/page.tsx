@@ -15,54 +15,49 @@ import { Plus, Search, Edit, Trash2, ExternalLink } from "lucide-react";
 import Link from "next/link";
 import { Book } from "@/types/book";
 import { formatDate, formatFileSize } from "@/lib/format";
+import { bookService } from "@/services/book.service";
+import { adminService } from "@/services/admin.service";
+import { toast } from "sonner";
 
 export default function BooksManagementPage() {
   const [books, setBooks] = useState<Book[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
 
-  useEffect(() => {
-    const fetchBooks = async () => {
-      try {
-        setIsLoading(true);
-        // const response = await adminService.getAllBooks();
-        // setBooks(response.data);
-        
-        await new Promise(resolve => setTimeout(resolve, 800));
-        setBooks([
-          {
-            id: "1",
-            title: "Histoire du Burkina Faso",
-            author: "Jean-Baptiste Kiéthéga",
-            description: "Une exploration détaillée de l'histoire du pays.",
-            fileFormat: "pdf",
-            fileSize: 2500000,
-            category: "Histoire",
-            downloadCount: 154,
-            createdAt: "2024-01-01T12:00:00.000Z",
-            updatedAt: "2024-01-01T12:00:00.000Z",
-          },
-          {
-            id: "2",
-            title: "Faso Dan Fani",
-            author: "Seydou Konaté",
-            description: "Sur l'art du tissage traditionnel.",
-            fileFormat: "epub",
-            fileSize: 1200000,
-            category: "Culture",
-            downloadCount: 89,
-            createdAt: "2024-01-10T09:30:00.000Z",
-            updatedAt: "2024-01-10T09:30:00.000Z",
-          }
-        ]);
-      } catch (error) {
-        console.error("Failed to fetch books", error);
-      } finally {
-        setIsLoading(false);
+  const fetchBooks = async () => {
+    try {
+      setIsLoading(true);
+      const response = await bookService.getAll();
+      // Assuming ApiResponse format with data: PaginatedResponse<Book>
+      if (response.data && Array.isArray(response.data.data)) {
+         setBooks(response.data.data);
+      } else if (Array.isArray(response.data)) {
+         setBooks(response.data);
       }
-    };
+    } catch (error) {
+      console.error("Failed to fetch books", error);
+      toast.error("Échec du chargement des livres");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchBooks();
   }, []);
+
+  const handleDelete = async (id: string) => {
+    if (confirm("Êtes-vous sûr de vouloir supprimer ce livre ?")) {
+      try {
+        await adminService.deleteBook(id);
+        toast.success("Livre supprimé avec succès");
+        fetchBooks(); // Refresh list
+      } catch (error) {
+        console.error("Delete error", error);
+        toast.error("Erreur lors de la suppression");
+      }
+    }
+  };
 
   const filteredBooks = books.filter(book => 
     book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -129,10 +124,17 @@ export default function BooksManagementPage() {
                           <ExternalLink className="h-4 w-4" />
                         </Link>
                       </Button>
-                      <Button variant="ghost" size="icon">
-                        <Edit className="h-4 w-4" />
+                      <Button variant="ghost" size="icon" asChild>
+                        <Link href={`/admin/books/edit/${book.id}`}>
+                          <Edit className="h-4 w-4" />
+                        </Link>
                       </Button>
-                      <Button variant="ghost" size="icon" className="text-red-500 hover:text-red-600 hover:bg-red-50">
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="text-red-500 hover:text-red-600 hover:bg-red-50"
+                        onClick={() => handleDelete(book.id)}
+                      >
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>

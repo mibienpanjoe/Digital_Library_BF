@@ -3,32 +3,23 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Book, Users, Download, ArrowUpRight, TrendingUp } from "lucide-react";
-// import { adminService, DashboardStats } from "@/services/admin.service";
+import { adminService, DashboardStats } from "@/services/admin.service";
+import { toast } from "sonner";
 
 export default function DashboardPage() {
-  const [stats, setStats] = useState<any>(null);
+  const [stats, setStats] = useState<DashboardStats | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
         setIsLoading(true);
-        // const response = await adminService.getDashboardStats();
-        // setStats(response.data);
-        
-        await new Promise(resolve => setTimeout(resolve, 800));
-        setStats({
-          totalBooks: 124,
-          totalUsers: 850,
-          totalDownloads: 3450,
-          recentActivity: [
-            { id: 1, action: "Nouveau livre ajouté", item: "L'art Burkinabè", user: "Admin", date: "Il y a 2h" },
-            { id: 2, action: "Nouvel utilisateur", item: "m.traore@email.com", user: "-", date: "Il y a 5h" },
-            { id: 3, action: "Téléchargement", item: "Histoire du BF", user: "Y. Diallo", date: "Il y a 6h" },
-          ]
-        });
+        const response = await adminService.getDashboardStats();
+        // Assuming ApiResponse format
+        setStats(response.data || (response as any));
       } catch (error) {
         console.error("Failed to fetch dashboard stats", error);
+        toast.error("Échec du chargement des statistiques");
       } finally {
         setIsLoading(false);
       }
@@ -45,6 +36,10 @@ export default function DashboardPage() {
         </div>
       </div>
     );
+  }
+
+  if (!stats) {
+     return <div className="text-center py-20 text-slate-500">Aucune donnée disponible.</div>;
   }
 
   return (
@@ -95,24 +90,25 @@ export default function DashboardPage() {
         </Card>
       </div>
 
-      <Card className="rounded-xl border-slate-200 dark:border-slate-800 shadow-sm">
-        <CardHeader>
-          <CardTitle>Activité Récente</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {stats.recentActivity.map((item: any) => (
-              <div key={item.id} className="flex items-center justify-between py-2 border-b border-slate-100 dark:border-slate-800 last:border-0">
-                <div>
-                  <p className="text-sm font-semibold">{item.action}</p>
-                  <p className="text-xs text-slate-500">{item.item} • {item.user}</p>
+      {stats.monthlyDownloads && stats.monthlyDownloads.length > 0 && (
+        <Card className="rounded-xl border-slate-200 dark:border-slate-800 shadow-sm">
+          <CardHeader>
+            <CardTitle>Activité (Téléchargements Mensuels)</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {stats.monthlyDownloads.map((item, index) => (
+                <div key={index} className="flex items-center justify-between py-2 border-b border-slate-100 dark:border-slate-800 last:border-0">
+                  <div>
+                    <p className="text-sm font-semibold">{item.date}</p>
+                    <p className="text-xs text-slate-500">{item.count} téléchargements</p>
+                  </div>
                 </div>
-                <span className="text-xs text-slate-400">{item.date}</span>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
