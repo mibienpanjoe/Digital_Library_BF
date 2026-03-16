@@ -7,13 +7,13 @@ class Env {
     if (fromEnv.isNotEmpty) return fromEnv;
     
     if (kIsWeb) {
-      return 'http://127.0.0.1:3000/api/v1';
+      return 'https://digital-library-bf-api.onrender.com/api/v1';
     } else {
       // Use Platform carefully because it throws on Web
       if (Platform.isAndroid) {
-        return 'http://10.0.2.2:3000/api/v1';
+        return 'https://digital-library-bf-api.onrender.com/api/v1';
       } else {
-        return 'http://127.0.0.1:3000/api/v1';
+        return 'https://digital-library-bf-api.onrender.com/api/v1';
       }
     }
   }
