@@ -23,9 +23,10 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(
-              'assets/images/logo.png',
-              height: 100,
+            const Icon(
+              Icons.menu_book_rounded,
+              size: 100,
+              color: AppColors.primaryBlue,
             ),
             const SizedBox(height: 24),
             Text(
