@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:open_filex/open_filex.dart';
@@ -15,21 +14,6 @@ class DownloadsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    // On web, file listing is not supported
-    if (kIsWeb) {
-      return Scaffold(
-        appBar: AppBar(
-          title: const Text('Mes Livres'),
-        ),
-        body: const EmptyState(
-          title: 'Téléchargements',
-          message: 'Les fichiers téléchargés sont gérés par votre navigateur.\n'
-              'Consultez le dossier de téléchargements de votre navigateur.',
-          icon: Icons.web_rounded,
-        ),
-      );
-    }
 
     return Scaffold(
       appBar: AppBar(
