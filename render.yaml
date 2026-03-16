@@ -1,0 +1,26 @@
+# render.yaml
+# Configuration for automated deployment of the Digital Library BF backend on Render.
+# Documentation: https://render.com/docs/yaml-spec
+services:
+  - type: web
+    name: digital-library-bf-api
+    env: node
+    region: frankfurt # You can change this to your preferred region (e.g., oregon, ohio)
+    plan: free
+    rootDir: backend
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 3001
+      # The following environment variables need to be set securely via the Render Dashboard.
+      # They are listed here with 'sync: false' so Render knows to expect them,
+      # but their sensitive values are not checked into source control.
+      - key: DATABASE_URL
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: JWT_SECRET
+        sync: false
