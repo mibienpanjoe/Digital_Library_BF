@@ -28,12 +28,12 @@ export function Navbar() {
   };
 
   return (
-    <nav className="sticky top-0 z-40 w-full border-b border-border bg-white/80 backdrop-blur-md dark:bg-[#0F172A]/80">
+    <nav className="sticky top-0 z-40 w-full bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-700">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
         <Link
           href="/"
-          className="flex items-center gap-2 text-foreground transition-opacity duration-150 hover:opacity-80"
+          className="flex items-center gap-2 text-slate-900 dark:text-slate-50 transition-opacity duration-150 hover:opacity-80"
         >
           <BookOpen className="h-6 w-6 text-primary" />
           <span className="text-lg font-bold tracking-tight">{APP_NAME}</span>
@@ -46,7 +46,7 @@ export function Navbar() {
           {isAuthenticated ? (
             <DropdownMenu>
               <DropdownMenuTrigger>
-                <Button variant="ghost" size="sm" className="gap-2">
+                <Button variant="ghost" size="sm" className="gap-2 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-50">
                   <User className="h-4 w-4" />
                   <span className="max-w-[120px] truncate">{user?.name}</span>
                 </Button>
@@ -77,7 +77,7 @@ export function Navbar() {
             </DropdownMenu>
           ) : (
             <div className="flex items-center gap-2">
-              <Button variant="ghost" size="sm" asChild>
+              <Button variant="ghost" size="sm" className="text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-50" asChild>
                 <Link href="/login">
                   <LogIn className="mr-2 h-4 w-4" />
                   Connexion
@@ -96,6 +96,7 @@ export function Navbar() {
           <Button
             variant="ghost"
             size="icon"
+            className="text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-50"
             onClick={() => setMobileOpen(!mobileOpen)}
           >
             {mobileOpen ? (
@@ -119,7 +120,7 @@ export function Navbar() {
               {isAdmin && (
                 <Button
                   variant="ghost"
-                  className="justify-start"
+                  className="justify-start text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-50"
                   onClick={() => {
                     router.push("/admin/dashboard");
                     setMobileOpen(false);
@@ -131,7 +132,7 @@ export function Navbar() {
               )}
               <Button
                 variant="ghost"
-                className="justify-start"
+                className="justify-start text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-50"
                 onClick={() => {
                   handleLogout();
                   setMobileOpen(false);
@@ -143,7 +144,7 @@ export function Navbar() {
             </div>
           ) : (
             <div className="flex flex-col gap-2">
-              <Button variant="ghost" className="justify-start" asChild>
+              <Button variant="ghost" className="justify-start text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-slate-50" asChild>
                 <Link href="/login" onClick={() => setMobileOpen(false)}>
                   <LogIn className="mr-2 h-4 w-4" />
                   Connexion
