@@ -31,18 +31,15 @@ class BookService {
       queryParameters: queryParameters,
     );
 
-    final apiResponse = ApiResponse<PaginatedResponse<Book>>.fromJson(
-      response.data as Map<String, dynamic>,
-      (json) => PaginatedResponse<Book>.fromJson(
-        json as Map<String, dynamic>,
-        (item) => Book.fromJson(item as Map<String, dynamic>),
-      ),
-    );
+    final json = response.data as Map<String, dynamic>;
 
-    if (apiResponse.success && apiResponse.data != null) {
-      return apiResponse.data!;
+    if (json['success'] == true) {
+      return PaginatedResponse<Book>.fromJson(
+        json,
+        (item) => Book.fromJson(item as Map<String, dynamic>),
+      );
     } else {
-      throw Exception(apiResponse.message ?? 'Failed to fetch books');
+      throw Exception(json['message'] ?? 'Failed to fetch books');
     }
   }
 
