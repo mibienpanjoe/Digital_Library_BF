@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:open_filex/open_filex.dart';
@@ -25,7 +24,7 @@ class _DownloadButtonState extends ConsumerState<DownloadButton> {
     final progressNotifier = ref.read(downloadProgressProvider.notifier);
 
     try {
-      final filePath = await repository.downloadBook(
+      await repository.downloadBook(
         widget.book,
         (count, total) {
           final progress = count / total;
@@ -33,6 +32,7 @@ class _DownloadButtonState extends ConsumerState<DownloadButton> {
         },
       );
 
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Téléchargement terminé !')),
       );
@@ -40,6 +40,7 @@ class _DownloadButtonState extends ConsumerState<DownloadButton> {
       // Update progress to 1.1 to signify "Downloaded and ready to open"
       progressNotifier.updateProgress(widget.book.id, 1.1);
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Erreur de téléchargement: $e')),
       );
@@ -60,6 +61,7 @@ class _DownloadButtonState extends ConsumerState<DownloadButton> {
       
       await OpenFilex.open(file.path);
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Impossible d\'ouvrir le fichier: $e')),
       );

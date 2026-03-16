@@ -1,6 +1,5 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../models/api_response.dart';
-import '../models/user.dart';
 import '../services/auth_service.dart';
 
 class AuthRepository {

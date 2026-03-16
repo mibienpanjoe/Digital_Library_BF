@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/user.dart';
 import '../repositories/auth_repository.dart';
-import '../repositories/profile_repository.dart';
 import 'repository_providers.dart';
 
 sealed class AuthState {}
@@ -45,7 +44,7 @@ class AuthNotifier extends Notifier<AuthState> {
       final profileRepository = ref.read(profileRepositoryProvider);
       final user = await profileRepository.getProfile();
       final token = await _authRepository.getToken();
-      if (user != null && token != null) {
+      if (token != null) {
         state = AuthAuthenticated(user: user, token: token);
       } else {
         state = AuthUnauthenticated();

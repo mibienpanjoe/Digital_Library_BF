@@ -5,11 +5,8 @@ import '../../widgets/book_grid.dart';
 import '../../widgets/search_bar.dart';
 import '../../widgets/pagination_controls.dart';
 import '../../widgets/error_state.dart';
-import '../../widgets/skeleton_loader.dart';
 import '../../widgets/empty_state.dart';
 import '../../utils/exceptions.dart';
-import '../../models/api_response.dart';
-import '../../models/book.dart';
 
 class CatalogScreen extends ConsumerStatefulWidget {
   const CatalogScreen({super.key});

@@ -51,7 +51,7 @@ class ProfileService {
 
     final apiResponse = ApiResponse<void>.fromJson(
       response.data as Map<String, dynamic>,
-      (json) => null,
+      (json) {},
     );
 
     if (!apiResponse.success) {

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/auth_provider.dart';
@@ -41,22 +40,22 @@ final routerProvider = Provider<GoRouter>((ref) {
     routes: [
       GoRoute(
         path: '/splash',
-        builder: (_, __) => const SplashScreen(),
+        builder: (context, state) => const SplashScreen(),
       ),
       GoRoute(
         path: '/login',
-        builder: (_, __) => const LoginScreen(),
+        builder: (context, state) => const LoginScreen(),
       ),
       GoRoute(
         path: '/register',
-        builder: (_, __) => const RegisterScreen(),
+        builder: (context, state) => const RegisterScreen(),
       ),
       ShellRoute(
         builder: (context, state, child) => MainShell(child: child),
         routes: [
           GoRoute(
             path: '/',
-            builder: (_, __) => const CatalogScreen(),
+            builder: (context, state) => const CatalogScreen(),
           ),
           GoRoute(
             path: '/book/:id',
@@ -64,15 +63,15 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: '/downloads',
-            builder: (_, __) => const DownloadsScreen(),
+            builder: (context, state) => const DownloadsScreen(),
           ),
           GoRoute(
             path: '/profile',
-            builder: (_, __) => const ProfileScreen(),
+            builder: (context, state) => const ProfileScreen(),
           ),
           GoRoute(
             path: '/profile/edit',
-            builder: (_, __) => const EditProfileScreen(),
+            builder: (context, state) => const EditProfileScreen(),
           ),
         ],
       ),
