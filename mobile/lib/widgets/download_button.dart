@@ -53,10 +53,20 @@ class _DownloadButtonState extends ConsumerState<DownloadButton> {
     try {
       final repository = ref.read(bookRepositoryProvider);
       final files = await repository.getDownloadedFiles();
-      // Find the file by name pattern (this is a bit hacky, normally we'd store the path)
+      
+      // Build the expected sanitized filename
+      final sanitizedTitle = widget.book.title
+          .replaceAll(RegExp(r'[^\w\s\-]'), '')
+          .replaceAll(' ', '_')
+          .toLowerCase();
+      
+      // Search by sanitized title first, then fall back to book.id for old downloads
       final file = files.firstWhere(
-        (f) => f.path.contains(widget.book.id),
-        orElse: () => throw Exception('Fichier non trouvé'),
+        (f) => f.path.contains(sanitizedTitle),
+        orElse: () => files.firstWhere(
+          (f) => f.path.contains(widget.book.id),
+          orElse: () => throw Exception('Fichier non trouvé'),
+        ),
       );
       
       await OpenFilex.open(file.path);

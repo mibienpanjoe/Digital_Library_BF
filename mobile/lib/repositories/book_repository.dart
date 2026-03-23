@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -35,7 +36,7 @@ class BookRepository {
     await _requestStoragePermission();
 
     final directory = await getApplicationDocumentsDirectory();
-    final fileName = '${book.id}_${_sanitizeFileName(book.title)}.${book.fileFormat}';
+    final fileName = '${_sanitizeFileName(book.title)}.${book.fileFormat}';
     final filePath = '${directory.path}/$fileName';
 
     await _bookService.download(
@@ -43,6 +44,9 @@ class BookRepository {
       filePath,
       onProgress: onProgress,
     );
+
+    // Save metadata mapping filename -> book title for display
+    await _saveBookMetadata(directory.path, fileName, book);
 
     return filePath;
   }
@@ -65,7 +69,10 @@ class BookRepository {
   Future<List<File>> getDownloadedFiles() async {
     final directory = await getApplicationDocumentsDirectory();
     final entities = await directory.list().toList();
-    return entities.whereType<File>().toList();
+    return entities
+        .whereType<File>()
+        .where((f) => f.path.endsWith('.pdf') || f.path.endsWith('.epub'))
+        .toList();
   }
 
   Future<void> deleteDownloadedFile(String filePath) async {
@@ -77,5 +84,46 @@ class BookRepository {
 
   String _sanitizeFileName(String name) {
     return name.replaceAll(RegExp(r'[^\w\s\-]'), '').replaceAll(' ', '_').toLowerCase();
+  }
+
+  /// Saves a JSON metadata file that maps filenames to book info for display.
+  Future<void> _saveBookMetadata(String dirPath, String fileName, Book book) async {
+    final metaFile = File('$dirPath/_books_metadata.json');
+    Map<String, dynamic> metadata = {};
+
+    if (await metaFile.exists()) {
+      try {
+        final content = await metaFile.readAsString();
+        metadata = jsonDecode(content) as Map<String, dynamic>;
+      } catch (_) {
+        // If corrupted, start fresh
+        metadata = {};
+      }
+    }
+
+    metadata[fileName] = {
+      'title': book.title,
+      'author': book.author,
+      'format': book.fileFormat,
+      'bookId': book.id,
+    };
+
+    await metaFile.writeAsString(jsonEncode(metadata));
+  }
+
+  /// Reads stored book metadata to get display names.
+  Future<Map<String, dynamic>> getBookMetadata() async {
+    final directory = await getApplicationDocumentsDirectory();
+    final metaFile = File('${directory.path}/_books_metadata.json');
+
+    if (await metaFile.exists()) {
+      try {
+        final content = await metaFile.readAsString();
+        return jsonDecode(content) as Map<String, dynamic>;
+      } catch (_) {
+        return {};
+      }
+    }
+    return {};
   }
 }
